@@ -1,9 +1,9 @@
 from app import app
-from flask import redirect
+from flask import redirect, render_template
 
 @app.route('/')
-def hello_world():
-    return 'Hello World!'
+def index():
+    return render_template('index.html')
 
 # default 'catch all' route
 @app.route('/', defaults={'path': ''})

@@ -16,7 +16,7 @@ module.exports = function(grunt) {
                     debug: true
                 },
                 files: {
-                    'app/static/main-build.js': ['app/static/main.js']
+                    'app/static/main-build.js': ['app/static/js/main.js']
                 }
             }
         },

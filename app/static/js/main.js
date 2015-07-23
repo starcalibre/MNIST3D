@@ -1,1 +1,1 @@
-alert('Javascript works!');
+window.alert('Browserify works!');

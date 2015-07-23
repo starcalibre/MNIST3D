@@ -1,0 +1,2 @@
+# don't commit the js file built by browserify!
+main-build.js

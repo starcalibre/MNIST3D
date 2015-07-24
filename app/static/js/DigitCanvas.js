@@ -1,5 +1,7 @@
 'use strict';
 
+var Utils = require('./Utils');
+
 function DigitCanvas(element, width, height) {
     this.canvas = document.getElementById(element);
     this.canvas.width = width;
@@ -8,8 +10,6 @@ function DigitCanvas(element, width, height) {
 
     this.gridWidth = this.canvas.width/28;
     this.gridHeight = this.canvas.height/28;
-
-    this.draw(testArray);
 }
 
 DigitCanvas.prototype.draw = function(valueArray) {
@@ -21,18 +21,10 @@ DigitCanvas.prototype.draw = function(valueArray) {
 };
 
 DigitCanvas.prototype.drawCell = function(value, cellX, cellY) {
-    this.context.fillStyle = rgbToHex(255 - value, 255 - value, 255 - value);
+    this.context.fillStyle = Utils.rgbToHex(255 - value, 255 - value, 255 - value);
     this.context.fillRect(this.gridWidth * cellX, this.gridHeight * cellY,
         this.gridWidth, this.gridHeight);
 };
 
-function componentToHex(c) {
-    var hex = c.toString(16);
-    return hex.length === 1 ? "0" + hex : hex;
-}
-
-function rgbToHex(r, g, b) {
-    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-}
-
 module.exports = DigitCanvas;
+

@@ -6,6 +6,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r71/three.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/lib/OrbitControls.js') }}"></script>
     <style>
         html, body {
             height: 100%;
@@ -21,13 +23,19 @@
         .col-full {
             height: 100%;
         }
+
+        #scatterplotDiv {
+            height: 100%;
+        }
     </style>
 </head>
 <body>
 <div class="container full">
     <div class="row full">
         <div class="col-lg-9 col-md-9 col-full">
-            <p>Left</p>
+            <div id="scatterplotDiv" class="row">
+
+            </div>
         </div>
         <div class="col-lg-3 col-md-3 col-full">
             <div id="canvasDiv" class="row">

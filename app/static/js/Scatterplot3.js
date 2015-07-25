@@ -11,7 +11,7 @@ function generateMaterial(colorHex) {
 }
 
 function Scatterplot3(element, width, height, data) {
-    this.container = document.getElementById(element);
+    this.$container = $('#' + element);
     this.width = width;
     this.height = height;
     var canvasRatio = width/height;
@@ -23,7 +23,7 @@ function Scatterplot3(element, width, height, data) {
     this.renderer.setSize(width, height);
     this.renderer.setClearColor( 0xFFFFFF, 1.0 );
 
-    this.container.appendChild( this.renderer.domElement );
+    this.$container .append( this.renderer.domElement );
 
     this.camera = new THREE.PerspectiveCamera( 25, canvasRatio, 1, 10000 );
     this.camera.position.set( -510, 240, 100 );
@@ -39,10 +39,9 @@ function Scatterplot3(element, width, height, data) {
 
     this.clock = new THREE.Clock();
 
-    this.container.addEventListener('click',
-        this.onClick.bind(this), false);
-    this.container.addEventListener('touchStart',
-        this.onTouchStart.bind(this), false);
+    this.$container .on('click', function(event) {
+        this.onClick(event);
+    }.bind(this));
 
     this.addLighting();
     this.setScale();
@@ -53,8 +52,11 @@ function Scatterplot3(element, width, height, data) {
 Scatterplot3.prototype.onClick = function(event) {
     event.preventDefault();
 
-    this.mouse.x = (event.clientX/(this.renderer.domElement.width)) * 2 - 1;
-    this.mouse.y = -(event.clientY/(this.renderer.domElement.height)) * 2 + 1;
+    var x = event.pageX - this.$container .offset().left;
+    var y = event.pageY - this.$container .offset().top;
+
+    this.mouse.x = (x/(this.renderer.domElement.width)) * 2 - 1;
+    this.mouse.y = -(y/(this.renderer.domElement.height)) * 2 + 1;
     this.rayCaster.setFromCamera(this.mouse, this.camera);
 
     var intersects = this.rayCaster.intersectObjects(this.points);

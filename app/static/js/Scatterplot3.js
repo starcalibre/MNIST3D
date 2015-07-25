@@ -1,10 +1,12 @@
 'use strict';
+/* global THREE */
 
-function Scatterplot3(element, width, height) {
+function Scatterplot3(element, width, height, data) {
     this.container = document.getElementById(element);
     this.width = width;
     this.height = height;
     var canvasRatio = width/height;
+    this.data = data;
 
     this.scene = new THREE.Scene();
     this.renderer = new THREE.WebGLRenderer({antialias: true});
@@ -16,12 +18,14 @@ function Scatterplot3(element, width, height) {
     this.camera = new THREE.PerspectiveCamera( 25, canvasRatio, 1, 10000 );
     this.camera.position.set( -510, 240, 100 );
 
-    this.cameraControls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+    this.cameraControls = new THREE.OrbitControls(this.camera,
+        this.renderer.domElement);
     this.cameraControls.target.set(0,50,0);
 
     this.clock = new THREE.Clock();
 
     this.addLighting();
+    this.setScale();
     this.fillScene();
     this.animate();
 }
@@ -40,6 +44,49 @@ Scatterplot3.prototype.addLighting = function() {
     this.scene.add(light2);
 };
 
+Scatterplot3.prototype.setScale = function () {
+    /* jshint ignore:start */
+    var xDomain = d3.extent(this.data, function(d) {
+        return d.tsne_x;
+    });
+
+    var yDomain = d3.extent(this.data, function(d) {
+        return d.tsne_y;
+    });
+
+    var zDomain = d3.extent(this.data, function(d) {
+        return d.tsne_z;
+    });
+
+    var range = 500;
+
+    this.xScale = d3.scale.linear()
+        .domain(xDomain)
+        .range([-range, range]);
+
+    this.yScale = d3.scale.linear()
+        .domain(yDomain)
+        .range([-range, range]);
+
+    this.zScale = d3.scale.linear()
+        .domain(zDomain)
+        .range([-range, range]);
+    /* jshint ignore:end */
+
+    this.colorScale = {
+        0: 0xff7f0e,
+        1: 0x2ca02c,
+        2: 0xd62728,
+        3: 0x8c564b,
+        4: 0x9467bd,
+        5: 0x8c564b,
+        6: 0xe377c2,
+        7: 0x7f7f7f,
+        8: 0xbcbd22,
+        9: 0x17becf
+    };
+};
+
 Scatterplot3.prototype.render = function() {
     var delta = this.clock.getDelta();
     this.cameraControls.update(delta);
@@ -48,12 +95,25 @@ Scatterplot3.prototype.render = function() {
 };
 
 Scatterplot3.prototype.fillScene = function() {
-    var sphereGeometry = new THREE.SphereGeometry(5, 32, 16);
-    var sphereMaterial = new THREE.MeshPhongMaterial( { color: 0x6E23BB, specular: 0x6E23BB, shininess: 20 } );
+    var sphereGeometry;
+    var sphereMaterial;
+    var newSphere;
 
-    var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-
-    this.scene.add(sphere);
+    for(var i = 0; i < this.data.length; i++) {
+        sphereGeometry = new THREE.SphereGeometry(5, 32, 16);
+        sphereMaterial = new THREE.MeshPhongMaterial({
+            color: this.colorScale[this.data[i].label],
+            specular: 0x6E23BB,
+            shininess: 20
+        });
+        newSphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+        /* jshint ignore:start */
+        newSphere.position.x = this.xScale(this.data[i].tsne_x);
+        newSphere.position.y = this.xScale(this.data[i].tsne_y);
+        newSphere.position.z = this.xScale(this.data[i].tsne_z);
+        this.scene.add(newSphere);
+        /* jshint ignore:end */
+    }
 };
 
 Scatterplot3.prototype.animate = function() {

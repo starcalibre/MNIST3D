@@ -11,6 +11,8 @@ function generateMaterial(colorHex) {
 }
 
 function Scatterplot3(element, width, height, data) {
+    this.defaultCameraPosition = new THREE.Vector3(2950, 820, 550);
+
     this.$container = $('#' + element);
     this.width = width;
     this.height = height;
@@ -26,7 +28,7 @@ function Scatterplot3(element, width, height, data) {
     this.$container .append( this.renderer.domElement );
 
     this.camera = new THREE.PerspectiveCamera( 25, canvasRatio, 1, 10000 );
-    this.camera.position.set( -510, 240, 100 );
+    this.camera.position.copy(this.defaultCameraPosition);
 
     this.cameraControls = new THREE.OrbitControls(this.camera,
         this.renderer.domElement);
@@ -48,6 +50,19 @@ function Scatterplot3(element, width, height, data) {
     this.fillScene();
     this.animate();
 }
+
+Scatterplot3.prototype.setCameraPosition = function(x, y, z) {
+    if(!x) {
+        x = this.defaultCameraPosition.x;
+    }
+    if(!y) {
+        y = this.defaultCameraPosition.y;
+    }
+    if(!z) {
+        z = this.defaultCameraPosition.z;
+    }
+    this.camera.position.set(x, y, z);
+};
 
 Scatterplot3.prototype.onClick = function(event) {
     event.preventDefault();
@@ -155,7 +170,7 @@ Scatterplot3.prototype.setScale = function () {
 Scatterplot3.prototype.render = function() {
     var delta = this.clock.getDelta();
     this.cameraControls.update(delta);
-
+    console.log(this.camera.position);
     this.renderer.render(this.scene, this.camera);
 };
 

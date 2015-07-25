@@ -28,6 +28,10 @@
             padding: 0;
         }
 
+        .row {
+            margin: inherit;
+        }
+
         #scatterplotDiv {
             height: 100%;
         }
@@ -35,7 +39,7 @@
         #scatterplotControls {
             width: 100%;
             margin: 0;
-            padding: 15px 0px 15px 15px;
+            padding: 0.5em 0.5em 0.5em 0.5em;
         }
 
         #scatterplotControls > ul {
@@ -44,7 +48,7 @@
 
         #scatterplotControls > ul li {
             display: inline;
-            margin: 0 10px 0 0;
+            padding: 0 1em 0 0;
         }
     </style>
 </head>
@@ -58,15 +62,15 @@
                         <button id="reset-button" type="button">Reset</button>
                     </li>
                     <li>
-                        <label for="rotate-x">Rotate X</label>
+                        <label for="rotate-x">Rotate X&nbsp;</label>
                         <input id="rotate-x" name="rotate-x" type="checkbox">
                     </li>
                     <li>
-                        <label for="rotate-y">Rotate Y</label>
+                        <label for="rotate-y">Rotate Y&nbsp;</label>
                         <input id="rotate-y" name="rotate-y" type="checkbox">
                     </li>
                     <li>
-                        <label for="rotate-z">Rotate Z</label>
+                        <label for="rotate-z">Rotate Z&nbsp;</label>
                         <input id="rotate-z" name="rotate-z" type="checkbox">
                     </li>
                 </ul>

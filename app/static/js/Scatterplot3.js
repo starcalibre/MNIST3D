@@ -11,7 +11,7 @@ function generateMaterial(colorHex) {
 }
 
 function Scatterplot3(element, width, height, data) {
-    this.defaultCameraPosition = new THREE.Vector3(2950, 820, 550);
+    this.defaultCameraPosition = new THREE.Vector3(1800, 330, 300);
 
     this.$container = $('#' + element);
     this.width = width;
@@ -68,17 +68,12 @@ Scatterplot3.prototype.toggleRotate = function(axis, rotate) {
     }
 };
 
-Scatterplot3.prototype.setCameraPosition = function(x, y, z) {
-    if(!x) {
-        x = this.defaultCameraPosition.x;
-    }
-    if(!y) {
-        y = this.defaultCameraPosition.y;
-    }
-    if(!z) {
-        z = this.defaultCameraPosition.z;
-    }
-    this.camera.position.set(x, y, z);
+Scatterplot3.prototype.resetView = function() {
+    this.camera.position.copy(this.defaultCameraPosition);
+    this.pointsObject.rotation.set(0, 0, 0);
+    this.rotateX = false;
+    this.rotateY = false;
+    this.rotateZ = false;
 };
 
 Scatterplot3.prototype.onClick = function(event) {

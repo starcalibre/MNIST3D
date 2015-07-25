@@ -46,7 +46,8 @@ $('body').on('updatePoint', function(event, data) {
 });
 
 $('#reset-button').on('click', function() {
-    scatterplot.setCameraPosition();
+    scatterplot.resetView();
+    $('input:checkbox').removeAttr('checked');
 });
 
 $('#rotate-x').on('change', function() {

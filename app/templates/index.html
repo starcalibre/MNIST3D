@@ -31,13 +31,47 @@
         #scatterplotDiv {
             height: 100%;
         }
+
+        #scatterplotControls {
+            width: 100%;
+            margin: 0;
+            padding: 15px 0px 15px 15px;
+        }
+
+        #scatterplotControls > ul {
+            list-style-type: none;
+        }
+
+        #scatterplotControls > ul li {
+            display: inline;
+            margin: 0 10px 0 0;
+        }
     </style>
 </head>
 <body>
 <div class="container full">
     <div class="row full">
         <div class="col-lg-9 col-md-9 col-full">
-            <div id="scatterplotDiv" class="row full">
+            <div id="scatterplotControls" class="row">
+                <ul>
+                    <li>
+                        <button id="reset-button" type="button">Reset</button>
+                    </li>
+                    <li>
+                        <label for="rotate-x">Rotate X</label>
+                        <input id="rotate-x" name="rotate-x" type="checkbox">
+                    </li>
+                    <li>
+                        <label for="rotate-y">Rotate Y</label>
+                        <input id="rotate-y" name="rotate-y" type="checkbox">
+                    </li>
+                    <li>
+                        <label for="rotate-z">Rotate Z</label>
+                        <input id="rotate-z" name="rotate-z" type="checkbox">
+                    </li>
+                </ul>
+            </div>
+            <div id="scatterplotDiv" class="row">
 
             </div>
         </div>

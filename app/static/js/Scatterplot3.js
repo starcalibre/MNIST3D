@@ -19,6 +19,11 @@ function Scatterplot3(element, width, height, data) {
     var canvasRatio = width/height;
     this.data = data;
     this.points = [];
+    this.pointsObject = new THREE.Object3D();
+
+    this.rotateX = false;
+    this.rotateY = false;
+    this.rotateZ = false;
 
     this.scene = new THREE.Scene();
     this.renderer = new THREE.WebGLRenderer({antialias: true});
@@ -50,6 +55,18 @@ function Scatterplot3(element, width, height, data) {
     this.fillScene();
     this.animate();
 }
+
+Scatterplot3.prototype.toggleRotate = function(axis, rotate) {
+    if(axis === 'x') {
+        this.rotateX = rotate;
+    }
+    else if(axis === 'y') {
+        this.rotateY = rotate;
+    }
+    else if(axis === 'z') {
+        this.rotateZ = rotate;
+    }
+};
 
 Scatterplot3.prototype.setCameraPosition = function(x, y, z) {
     if(!x) {
@@ -170,7 +187,11 @@ Scatterplot3.prototype.setScale = function () {
 Scatterplot3.prototype.render = function() {
     var delta = this.clock.getDelta();
     this.cameraControls.update(delta);
-    console.log(this.camera.position);
+
+    this.pointsObject.rotation.x += this.rotateX ? 0.05 : 0;
+    this.pointsObject.rotation.y += this.rotateY ? 0.05 : 0;
+    this.pointsObject.rotation.z += this.rotateZ ? 0.05 : 0;
+
     this.renderer.render(this.scene, this.camera);
 };
 
@@ -193,7 +214,8 @@ Scatterplot3.prototype.fillScene = function() {
         };
 
         this.points.push(newSphere);
-        this.scene.add(newSphere);
+        this.pointsObject.add(newSphere);
+        this.scene.add(this.pointsObject);
         /* jshint ignore:end */
     }
 };

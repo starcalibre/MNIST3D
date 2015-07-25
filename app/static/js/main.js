@@ -44,3 +44,23 @@ $('body').on('updatePoint', function(event, data) {
         }
     });
 });
+
+$('#reset-button').on('click', function() {
+    scatterplot.setCameraPosition();
+});
+
+$('#rotate-x').on('change', function() {
+    var val = $(this).is(':checked');
+    scatterplot.toggleRotate('x', val);
+});
+
+$('#rotate-y').on('change', function() {
+    var val = $(this).is(':checked');
+    scatterplot.toggleRotate('y', val);
+});
+
+$('#rotate-z').on('change', function() {
+    var val = $(this).is(':checked');
+    scatterplot.toggleRotate('z', val);
+});
+

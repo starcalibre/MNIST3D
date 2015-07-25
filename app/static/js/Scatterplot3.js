@@ -1,5 +1,6 @@
 'use strict';
 /* global THREE */
+/* exported generateMaterial */
 
 function Scatterplot3(element, width, height, data) {
     this.container = document.getElementById(element);
@@ -37,7 +38,7 @@ Scatterplot3.prototype.addLighting = function() {
     light.position.set( 200, 400, 500 );
 
     var light2 = new THREE.DirectionalLight( 0xFFFFFF, 1.0 );
-    light2.position.set( -500, 250, -200 );
+    light2.position.set( -200, -400, 500 );
 
     this.scene.add(ambientLight);
     this.scene.add(light);
@@ -71,20 +72,20 @@ Scatterplot3.prototype.setScale = function () {
     this.zScale = d3.scale.linear()
         .domain(zDomain)
         .range([-range, range]);
-    /* jshint ignore:end */
 
     this.colorScale = {
-        0: 0xff7f0e,
-        1: 0x2ca02c,
-        2: 0xd62728,
-        3: 0x8c564b,
-        4: 0x9467bd,
-        5: 0x8c564b,
-        6: 0xe377c2,
-        7: 0x7f7f7f,
-        8: 0xbcbd22,
-        9: 0x17becf
+        0: generateMaterial(0xff7f0e),
+        1: generateMaterial(0x2ca02c),
+        2: generateMaterial(0xd62728),
+        3: generateMaterial(0x8c564b),
+        4: generateMaterial(0x9467bd),
+        5: generateMaterial(0x8c564b),
+        6: generateMaterial(0xe377c2),
+        7: generateMaterial(0x7f7f7f),
+        8: generateMaterial(0xbcbd22),
+        9: generateMaterial(0x17becf)
     };
+    /* jshint ignore:end */
 };
 
 Scatterplot3.prototype.render = function() {
@@ -101,11 +102,7 @@ Scatterplot3.prototype.fillScene = function() {
 
     for(var i = 0; i < this.data.length; i++) {
         sphereGeometry = new THREE.SphereGeometry(5, 32, 16);
-        sphereMaterial = new THREE.MeshPhongMaterial({
-            color: this.colorScale[this.data[i].label],
-            specular: 0x6E23BB,
-            shininess: 20
-        });
+        sphereMaterial = this.colorScale[this.data[i].label];
         newSphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
         /* jshint ignore:start */
         newSphere.position.x = this.xScale(this.data[i].tsne_x);
@@ -120,5 +117,13 @@ Scatterplot3.prototype.animate = function() {
     window.requestAnimationFrame(this.animate.bind(this));
     this.render();
 };
+
+function generateMaterial(colorHex) {
+    return new THREE.MeshPhongMaterial({
+        color: colorHex,
+        specular: 0x6E23BB,
+        shininess: 20
+    });
+}
 
 module.exports = Scatterplot3;

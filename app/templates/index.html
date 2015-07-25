@@ -11,17 +11,21 @@
     <style>
         html, body {
             height: 100%;
-            margin: 0;
+            width: 100%;
         }
 
         .full {
             margin: 0 auto;
             width: 100%;
             height: 100%;
+            padding: 0;
         }
 
         .col-full {
             height: 100%;
+            left: 0;
+            margin: 0;
+            padding: 0;
         }
 
         #scatterplotDiv {
@@ -33,12 +37,12 @@
 <div class="container full">
     <div class="row full">
         <div class="col-lg-9 col-md-9 col-full">
-            <div id="scatterplotDiv" class="row">
+            <div id="scatterplotDiv" class="row full">
 
             </div>
         </div>
         <div class="col-lg-3 col-md-3 col-full">
-            <div id="canvasDiv" class="row">
+            <div id="canvasDiv" class="row full">
                 <canvas id="digitCanvas"></canvas>
             </div>
         </div>

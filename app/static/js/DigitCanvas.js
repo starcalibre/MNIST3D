@@ -21,7 +21,8 @@ DigitCanvas.prototype.draw = function(valueArray) {
 };
 
 DigitCanvas.prototype.drawCell = function(value, cellX, cellY) {
-    this.context.fillStyle = Utils.rgbToHex(255 - value, 255 - value, 255 - value);
+    this.context.fillStyle = Utils.rgbToHex(255 - value,
+        255 - value, 255 - value);
     this.context.fillRect(this.gridWidth * cellX, this.gridHeight * cellY,
         this.gridWidth, this.gridHeight);
 };

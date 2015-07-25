@@ -96,12 +96,11 @@ Scatterplot3.prototype.render = function() {
 };
 
 Scatterplot3.prototype.fillScene = function() {
-    var sphereGeometry;
+    var sphereGeometry = new THREE.SphereGeometry(5, 32, 16);
     var sphereMaterial;
     var newSphere;
 
     for(var i = 0; i < this.data.length; i++) {
-        sphereGeometry = new THREE.SphereGeometry(5, 32, 16);
         sphereMaterial = this.colorScale[this.data[i].label];
         newSphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
         /* jshint ignore:start */

@@ -66,5 +66,21 @@ $('#rotate-z').on('change', function() {
     scatterplot.toggleRotate('z', val);
 });
 
+var resizeDebounce;
+$(window).on('resize', function() {
+    clearTimeout(resizeDebounce);
+    resizeDebounce = setTimeout(function() {
+        scatterPlotWidth = $scatterplotDiv.width();
+        scatterPlotHeight = $scatterplotDiv.height();
+        digitCanvasWidth = $canvasDiv.width();
+        digitCanvasHeight = $canvasDiv.width();
+
+        digitCanvas.resize(digitCanvasWidth, digitCanvasHeight);
+        scatterplot.resize(scatterPlotWidth, scatterPlotHeight);
+    }, 100);
+});
+
 // set the first point to be active when plot loaded
 $body.trigger('updatePoint', 0);
+
+

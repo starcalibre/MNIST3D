@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>I'll be an app one day!</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r71/three.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.js"></script>
@@ -39,7 +40,7 @@
         #scatterplotControls {
             width: 100%;
             margin: 0;
-            padding: 0.5em 0.5em 0.5em 0.5em;
+            padding: 1em 0 0 0;
         }
 
         #scatterplotControls > ul {
@@ -49,6 +50,15 @@
         #scatterplotControls > ul li {
             display: inline;
             padding: 0 1em 0 0;
+        }
+
+        .info-panel {
+            padding: 1em 1em 1em 1em;
+        }
+
+        .info-panel ul {
+            list-style-type: none;
+            padding-left: 0;
         }
     </style>
 </head>
@@ -80,8 +90,37 @@
             </div>
         </div>
         <div class="col-lg-3 col-md-3 col-full">
-            <div id="canvasDiv" class="row full">
+            <div id="canvasDiv" class="row">
                 <canvas id="digitCanvas"></canvas>
+            </div>
+            <div class="row info-panel">
+                <h3>MNIST Dataset 3D</h3>
+                <p>
+                    The <a href="http://yann.lecun.com/exdb/mnist/" target="_blank">MNIST</a> dataset is a collection
+                    of 60,000 handwritten digits ranging from 0-9. This visualisation takes a random sample of 10,000
+                    digits and maps them to a three dimensional space using the very cool method of
+                    <a href="http://lvdmaaten.github.io/tsne/" target="_blank"> TSNE</a>. TSNE has grouped each
+                    image representing the different digits quite nicely.
+                </p>
+                <p>
+                    Explore the visualisation by zooming with the mouse wheel, panning by dragging with the right mouse
+                    button and rotating by dragging with the left mouse button. Clicking on points will display the
+                    corresponding image in the above panel.
+                </p>
+                <p>
+                    The visualisation is built using the excellent <a href="http://threejs.org/" target="_blank">
+                    Three.js</a> library.
+                </p>
+                    <ul class="contact">
+                        <li>
+                            <i class="fa fa-github"></i>&nbsp;
+                            <a href="https://www.github.com/starcalibre/MNIST3D" target="_blank">source</a>
+                        </li>
+                        <li>
+                            <i class="fa fa-twitter"></i>&nbsp;
+                            <a href="https://www.twitter.com/starcalibre" target="_blank">@starcalibre</a>
+                        </li>
+                    </ul>
             </div>
         </div>
     </div>

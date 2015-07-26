@@ -1,18 +1,26 @@
 'use strict';
 /* global THREE */
-/* exported generateMaterial */
-
-function generateMaterial(colorHex) {
-    return new THREE.MeshPhongMaterial({
-        color: colorHex,
-        specular: 0x6E23BB,
-        shininess: 20
-    });
-}
 
 function Scatterplot3(element, width, height, data) {
     this.defaultCameraPosition = new THREE.Vector3(1800, 330, 300);
     this.defaultCameraTarget = new THREE.Vector3(0, 50, 0);
+    this.domainRangeX = 500;
+    this.domainRangeY = 500;
+    this.domainRangeZ = 500;
+    this.rotateSpeed = 0.05;
+
+    this.colorScale = {
+        0: 0xff7f0e,
+        1: 0x2ca02c,
+        2: 0xd62728,
+        3: 0x8c564b,
+        4: 0x9467bd,
+        5: 0x8c564b,
+        6: 0xe377c2,
+        7: 0x7f7f7f,
+        8: 0xbcbd22,
+        9: 0x17becf
+    };
 
     this.$container = $('#' + element);
     this.width = width;
@@ -29,11 +37,11 @@ function Scatterplot3(element, width, height, data) {
     this.scene = new THREE.Scene();
     this.renderer = new THREE.WebGLRenderer({antialias: true});
     this.renderer.setSize(width, height);
-    this.renderer.setClearColor( 0xFFFFFF, 1.0 );
+    this.renderer.setClearColor(0xFFFFFF, 1.0);
 
-    this.$container.append( this.renderer.domElement );
+    this.$container.append(this.renderer.domElement);
 
-    this.camera = new THREE.PerspectiveCamera( 25, canvasRatio, 1, 10000 );
+    this.camera = new THREE.PerspectiveCamera(25, canvasRatio, 1, 10000);
     this.camera.position.copy(this.defaultCameraPosition);
 
     this.cameraControls = new THREE.OrbitControls(this.camera,
@@ -71,7 +79,7 @@ Scatterplot3.prototype.toggleRotate = function(axis, rotate) {
 
 Scatterplot3.prototype.resetView = function() {
     this.camera.position.copy(this.defaultCameraPosition);
-    this.cameraControls.target.set(0,50,0);
+    this.cameraControls.target.copy(this.defaultCameraTarget);
     this.pointsObject.rotation.set(0, 0, 0);
     this.rotateX = false;
     this.rotateY = false;
@@ -81,9 +89,13 @@ Scatterplot3.prototype.resetView = function() {
 Scatterplot3.prototype.onClick = function(event) {
     event.preventDefault();
 
+    // click position is calculated relative to window,
+    // not to the canvas element. use jQuery offset to catch
+    // the right position
     var x = event.pageX - this.$container.offset().left;
     var y = event.pageY - this.$container.offset().top;
 
+    //
     this.mouse.x = (x/(this.renderer.domElement.width)) * 2 - 1;
     this.mouse.y = -(y/(this.renderer.domElement.height)) * 2 + 1;
     this.rayCaster.setFromCamera(this.mouse, this.camera);
@@ -107,18 +119,16 @@ Scatterplot3.prototype.onClick = function(event) {
     }
 };
 
-Scatterplot3.prototype.onTouchStart = function() {
-    console.log('touchStart!');
-};
-
 Scatterplot3.prototype.addLighting = function() {
-    var ambientLight = new THREE.AmbientLight( 0x222222 );
+    var ambientLight = new THREE.AmbientLight(0x222222);
 
-    var light = new THREE.DirectionalLight( 0xFFFFFF, 1.25 );
-    light.position.set( 500, 500, 500 );
+    var light = new THREE.DirectionalLight(0xFFFFFF, 1.25);
+    light.position.set(this.domainRangeX, this.domainRangeY,
+        this.domainRangeY);
 
-    var light2 = new THREE.DirectionalLight( 0xFFFFFF, 1.25 );
-    light2.position.set( -500, -500, -500 );
+    var light2 = new THREE.DirectionalLight(0xFFFFFF, 1.25);
+    light2.position.set(-this.domainRangeX, -this.domainRangeY,
+        -this.domainRangeY);
 
     this.scene.add(ambientLight);
     this.scene.add(light);
@@ -126,6 +136,8 @@ Scatterplot3.prototype.addLighting = function() {
 };
 
 Scatterplot3.prototype.setScale = function () {
+    // ignores here so jshint doesn't complain
+    // about the snake case
     /* jshint ignore:start */
     var xDomain = d3.extent(this.data, function(d) {
         return d.tsne_x;
@@ -139,45 +151,17 @@ Scatterplot3.prototype.setScale = function () {
         return d.tsne_z;
     });
 
-    var range = 500;
-
     this.xScale = d3.scale.linear()
         .domain(xDomain)
-        .range([-range, range]);
+        .range([-this.domainRangeX, this.domainRangeX]);
 
     this.yScale = d3.scale.linear()
         .domain(yDomain)
-        .range([-range, range]);
+        .range([-this.domainRangeY, this.domainRangeY]);
 
     this.zScale = d3.scale.linear()
         .domain(zDomain)
-        .range([-range, range]);
-
-    this.colorScaleMaterial = {
-        0: generateMaterial(0xff7f0e),
-        1: generateMaterial(0x2ca02c),
-        2: generateMaterial(0xd62728),
-        3: generateMaterial(0x8c564b),
-        4: generateMaterial(0x9467bd),
-        5: generateMaterial(0x8c564b),
-        6: generateMaterial(0xe377c2),
-        7: generateMaterial(0x7f7f7f),
-        8: generateMaterial(0xbcbd22),
-        9: generateMaterial(0x17becf)
-    };
-
-    this.colorScale = {
-        0: 0xff7f0e,
-        1: 0x2ca02c,
-        2: 0xd62728,
-        3: 0x8c564b,
-        4: 0x9467bd,
-        5: 0x8c564b,
-        6: 0xe377c2,
-        7: 0x7f7f7f,
-        8: 0xbcbd22,
-        9: 0x17becf
-    };
+        .range([-this.domainRangeZ, this.domainRangeZ]);
     /* jshint ignore:end */
 };
 
@@ -185,9 +169,9 @@ Scatterplot3.prototype.render = function() {
     var delta = this.clock.getDelta();
     this.cameraControls.update(delta);
 
-    this.pointsObject.rotation.x += this.rotateX ? 0.05 : 0;
-    this.pointsObject.rotation.y += this.rotateY ? 0.05 : 0;
-    this.pointsObject.rotation.z += this.rotateZ ? 0.05 : 0;
+    this.pointsObject.rotation.x += this.rotateX ? this.rotateSpeed : 0;
+    this.pointsObject.rotation.y += this.rotateY ? this.rotateSpeed : 0;
+    this.pointsObject.rotation.z += this.rotateZ ? this.rotateSpeed : 0;
 
     this.renderer.render(this.scene, this.camera);
 };
@@ -198,13 +182,22 @@ Scatterplot3.prototype.fillScene = function() {
     var newSphere;
 
     for(var i = 0; i < this.data.length; i++) {
-        sphereMaterial = generateMaterial(this.colorScale[this.data[i].label]);
+        // we need to generate a unique material for each point
+        // as the color changes when it's clicked
+        sphereMaterial = new THREE.MeshPhongMaterial({
+            color: this.colorScale[this.data[i].label],
+            shininess: 15
+        });
         newSphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 
+        // snake case ahoy, nothing to see here jsHint..
         /* jshint ignore:start */
         newSphere.position.x = this.xScale(this.data[i].tsne_x);
-        newSphere.position.y = this.xScale(this.data[i].tsne_y);
-        newSphere.position.z = this.xScale(this.data[i].tsne_z);
+        newSphere.position.y = this.yScale(this.data[i].tsne_y);
+        newSphere.position.z = this.zScale(this.data[i].tsne_z);
+        // bind some data to each sphere object, we need the label
+        // to restore the spheres original color and the id to trigger
+        // update events to the digit display canvas
         newSphere.data = {
             label: this.data[i].label,
             id: this.data[i].id

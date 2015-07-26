@@ -12,6 +12,7 @@ function generateMaterial(colorHex) {
 
 function Scatterplot3(element, width, height, data) {
     this.defaultCameraPosition = new THREE.Vector3(1800, 330, 300);
+    this.defaultCameraTarget = new THREE.Vector3(0, 50, 0);
 
     this.$container = $('#' + element);
     this.width = width;
@@ -30,14 +31,14 @@ function Scatterplot3(element, width, height, data) {
     this.renderer.setSize(width, height);
     this.renderer.setClearColor( 0xFFFFFF, 1.0 );
 
-    this.$container .append( this.renderer.domElement );
+    this.$container.append( this.renderer.domElement );
 
     this.camera = new THREE.PerspectiveCamera( 25, canvasRatio, 1, 10000 );
     this.camera.position.copy(this.defaultCameraPosition);
 
     this.cameraControls = new THREE.OrbitControls(this.camera,
         this.renderer.domElement);
-    this.cameraControls.target.set(0,50,0);
+    this.cameraControls.target.copy(this.defaultCameraTarget);
 
     this.currentActivePoint = null;
     this.lastActivePoint = null;
@@ -46,7 +47,7 @@ function Scatterplot3(element, width, height, data) {
 
     this.clock = new THREE.Clock();
 
-    this.$container .on('click', function(event) {
+    this.$container.on('click', function(event) {
         this.onClick(event);
     }.bind(this));
 
@@ -70,6 +71,7 @@ Scatterplot3.prototype.toggleRotate = function(axis, rotate) {
 
 Scatterplot3.prototype.resetView = function() {
     this.camera.position.copy(this.defaultCameraPosition);
+    this.cameraControls.target.set(0,50,0);
     this.pointsObject.rotation.set(0, 0, 0);
     this.rotateX = false;
     this.rotateY = false;
@@ -79,8 +81,8 @@ Scatterplot3.prototype.resetView = function() {
 Scatterplot3.prototype.onClick = function(event) {
     event.preventDefault();
 
-    var x = event.pageX - this.$container .offset().left;
-    var y = event.pageY - this.$container .offset().top;
+    var x = event.pageX - this.$container.offset().left;
+    var y = event.pageY - this.$container.offset().top;
 
     this.mouse.x = (x/(this.renderer.domElement.width)) * 2 - 1;
     this.mouse.y = -(y/(this.renderer.domElement.height)) * 2 + 1;
@@ -215,11 +217,16 @@ Scatterplot3.prototype.fillScene = function() {
     }
 };
 
+Scatterplot3.prototype.resize = function(width, height) {
+    this.camera.aspect = width/height;
+    this.camera.updateProjectionMatrix();
+    this.renderer.setSize(width, height);
+};
+
 Scatterplot3.prototype.animate = function() {
     window.requestAnimationFrame(this.animate.bind(this));
     this.render();
 };
-
 
 
 module.exports = Scatterplot3;

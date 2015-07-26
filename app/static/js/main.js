@@ -1,15 +1,16 @@
 'use strict';
-/* exported scatterplot, DigitCanvas, digitCanvas */
-
 var Scatterplot3 = require('./Scatterplot3');
 var DigitCanvas = require('./DigitCanvas');
 
 var scatterplot;
+var $body = $('body');
+var $scatterplotDiv = $('#scatterplotDiv');
+var $canvasDiv = $('#canvasDiv');
 
-var scatterPlotWidth = $('#scatterplotDiv').width();
-var scatterPlotHeight = $('#scatterplotDiv').height();
-var digitCanvasWidth = $('#canvasDiv').width();
-var digitCanvasHeight = $('#canvasDiv').width();
+var scatterPlotWidth = $scatterplotDiv.width();
+var scatterPlotHeight = $scatterplotDiv.height();
+var digitCanvasWidth = $canvasDiv.width();
+var digitCanvasHeight = $canvasDiv.width();
 
 var query = {
     limit: 10000,
@@ -23,13 +24,13 @@ $.ajax({
     type: 'GET',
     url: '/api?' + $.param(query, true),
     success: function(data) {
-        console.log(data.result.length);
         scatterplot = new Scatterplot3('scatterplotDiv', scatterPlotWidth,
             scatterPlotHeight, data.result);
     }
 });
 
-$('body').on('updatePoint', function(event, data) {
+// handle events when points in scatterplot clicked
+$body.on('updatePoint', function(event, data) {
     var query = {
         id: data,
         select: ['array']
@@ -65,3 +66,5 @@ $('#rotate-z').on('change', function() {
     scatterplot.toggleRotate('z', val);
 });
 
+// set the first point to be active when plot loaded
+$body.trigger('updatePoint', 0);

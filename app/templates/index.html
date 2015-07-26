@@ -13,6 +13,7 @@
         html, body {
             height: 100%;
             width: 100%;
+            overflow-x: hidden;
         }
 
         .full {
@@ -37,28 +38,28 @@
             height: 100%;
         }
 
-        #scatterplotControls {
+        .scatterplotControls {
             width: 100%;
             margin: 0;
             padding: 1em 0 0 0;
         }
 
-        #scatterplotControls > ul {
+        .scatterplotControls > ul {
             list-style-type: none;
         }
 
-        #scatterplotControls > ul li {
+        .scatterplotControls > ul li {
             display: inline;
             padding: 0 1em 0 0;
         }
 
         .info-panel {
-            padding: 1em 1em 1em 1em;
+            padding: 0em 1em 1em 1em;
         }
 
         .info-panel ul {
             list-style-type: none;
-            padding-left: 0;
+            padding-left: 0:
         }
     </style>
 </head>
@@ -66,7 +67,7 @@
 <div class="container full">
     <div class="row full">
         <div class="col-lg-9 col-md-9 col-full">
-            <div id="scatterplotControls" class="row">
+            <div class="row scatterplotControls">
                 <ul>
                     <li>
                         <button id="reset-button" type="button">Reset</button>

@@ -95,9 +95,16 @@ Scatterplot3.prototype.onClick = function(event) {
     var x = event.pageX - this.$container.offset().left;
     var y = event.pageY - this.$container.offset().top;
 
-    //
+    // need to translate the mouse position to normalised device (NDC)
+    // coordinates. mouse positions are given with origin (0, 0) in
+    // the top-left, x range [0, width] y range [0, height]
+    // NDC is range for x and y [-1, 1] with the origin in center at (0, 0).
+    // note needs to be inverted!
     this.mouse.x = (x/(this.renderer.domElement.width)) * 2 - 1;
     this.mouse.y = -(y/(this.renderer.domElement.height)) * 2 + 1;
+
+    // raycaster takes the x, y position of mouse, and casts from the
+    // direction the camera is point
     this.rayCaster.setFromCamera(this.mouse, this.camera);
 
     var intersects = this.rayCaster.intersectObjects(this.points);

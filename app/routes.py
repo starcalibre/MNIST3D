@@ -18,7 +18,12 @@ def api():
     query_limit = request.args.get('limit')  # get first limit in query string
     query_select = request.args.getlist('select')  # get all select params
 
-    if query_id is not None:
+    # prevent queries with ALL array data
+    if query_id is None and "array" in query_select:
+        result = Digit.query.\
+            filter(Digit.id == 0).\
+            all()
+    elif query_id is not None:
         result = Digit.query.\
             filter(Digit.id == query_id).\
             all()

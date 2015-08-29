@@ -184,7 +184,7 @@ Scatterplot3.prototype.render = function() {
 };
 
 Scatterplot3.prototype.fillScene = function() {
-    var sphereGeometry = new THREE.SphereGeometry(5, 32, 16);
+    var sphereGeometry = new THREE.SphereGeometry(5, 8, 8);
     var sphereMaterial;
     var newSphere;
 
